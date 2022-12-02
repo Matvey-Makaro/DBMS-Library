@@ -772,6 +772,19 @@
            <number>0</number>
           </property>
           <item>
+           <spacer name="verticalSpacer_12">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="QPushButton" name="pushButton_18">
             <property name="text">
              <string>Добавить читателя</string>
@@ -781,9 +794,50 @@
           <item>
            <widget class="QPushButton" name="pushButton_17">
             <property name="text">
-             <string>PushButton</string>
+             <string>Показать всех читателей</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_19">
+            <property name="text">
+             <string>Изменить читателя</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_20">
+            <property name="text">
+             <string>Удалить читателя</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_21">
+            <property name="text">
+             <string>Показать взятые книги читателя</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_22">
+            <property name="text">
+             <string>Принять книгу от читателя</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_11">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </item>
