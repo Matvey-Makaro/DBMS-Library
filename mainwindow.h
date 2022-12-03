@@ -61,6 +61,36 @@ private slots:
 
     void on_work_with_booked_book_back_btn_clicked();
 
+    void on_enter_for_authorization_reader_btn_clicked();
+
+    void on_show_all_books_for_reader_btn_clicked();
+
+    void on_work_with_books_for_reader_btn_clicked();
+
+    void on_work_with_booked_books_for_reader_btn_clicked();
+
+    void on_information_about_reader_btn_clicked();
+
+    void on_information_about_reader_back_btn_clicked();
+
+    void on_work_with_booked_book_for_readers_back_btn_clicked();
+
+    void on_work_with_books_for_readers_back_btn_clicked();
+
+    void on_find_books_for_reader_clicked();
+
+    void on_book_book_for_reader_btn_clicked();
+
+    void on_show_booked_book_for_reader_btn_clicked();
+
+    void on_cancle_booking_book_for_reader_btn_clicked();
+
+    void on_show_debts_for_reader_btn_clicked();
+
+    void on_show_taken_books_for_reader_btn_clicked();
+
+    void on_add_book_back_btn_clicked();
+
 private:
     Ui::MainWindow *ui;
     DAO& dao;

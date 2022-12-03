@@ -37,7 +37,18 @@ public:
     void add_book(const BookInfo& book_info);
     QSqlQueryModel& find_book_by_name(const QString& book_name);
     QSqlQueryModel& show_booked_book_by_reader_id(int r_id);
+    QSqlQueryModel& show_booked_book();
     void lend_book(int b_id, int r_id);
+    QSqlQueryModel& show_all_books_for_reader();
+    bool authorize_reader(const QString& name, const QString& surname, const QString& number);
+    void book_book(int b_id);
+    void cancle_booking(int r_id, int b_id);
+    void cancle_booking(int b_id);
+    QSqlQueryModel& show_taken_books(int r_id);
+    QSqlQueryModel& show_taken_books();
+    QSqlQueryModel& show_debtor_books(int r_id);
+    QSqlQueryModel& show_debtor_books();
+
 private:
     bool createConnection();
     void make_query(QSqlQuery& query, const QString& query_str);

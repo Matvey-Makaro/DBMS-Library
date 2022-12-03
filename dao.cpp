@@ -52,7 +52,7 @@ bool DAO::authorize(Role role, const QString& login, const QString& password)
     {
         role_str = "ADMIN";
         role_id_str = "administrator_id";
-        table_str = "Аdministrators";
+        table_str = "Administrators";
     }
     else if(role == Role::LIBRARIAN)
     {
@@ -154,11 +154,97 @@ QSqlQueryModel &DAO::show_booked_book_by_reader_id(int r_id)
 
 }
 
+QSqlQueryModel &DAO::show_booked_book()
+{
+    return show_booked_book_by_reader_id(id);
+}
+
 void DAO::lend_book(int b_id, int r_id)
 {
     QString str_template = "CALL lend_book(%1, %2);";
     QSqlQuery query;
     make_query(query, str_template.arg(b_id).arg(r_id));
+}
+
+QSqlQueryModel &DAO::show_all_books_for_reader()
+{
+    model->setQuery("SELECT * FROM books_info WHERE available_amount > 0");
+
+    if(model->lastError().isValid())
+        throw std::runtime_error(model->lastError().text().toStdString());
+
+    return *model;
+}
+
+bool DAO::authorize_reader(const QString &name, const QString &surname, const QString &number)
+{
+    QString role_str = "READER", role_id_str = "reader_id", table_str="readers_info";
+
+    QSqlQuery query;
+    QString query_str_template = "SELECT %1 FROM %2 WHERE name=\'%3\' AND surname=\'%4\' AND number=\'%5\';";
+    make_query(query, query_str_template.arg(role_id_str).arg(table_str).arg(name).arg(surname).arg(number));
+
+    qDebug() << query.size() << '\n';
+    if(query.size() == 0)
+        return false;
+    assert(query.size() == 1);
+
+    query.next();
+    id = query.value(role_id_str).toInt();
+    qDebug() << id << '\n';
+    make_query(query, QString("SET @CUR_ID=%1").arg(id));
+    make_query(query, QString("SET @CUR_ROLE=\'%1\'").arg(role_str));
+
+    return true;
+}
+
+void DAO::book_book(int b_id)
+{
+    QString str_template = "CALL book_book(%1);";
+    QSqlQuery query;
+    make_query(query, str_template.arg(b_id));
+}
+
+void DAO::cancle_booking(int r_id, int b_id)
+{
+    QString str_template = "CALL cancle_booking_book(%1, %2);";
+    QSqlQuery query;
+    make_query(query, str_template.arg(r_id).arg(b_id));
+}
+
+void DAO::cancle_booking(int b_id)
+{
+    cancle_booking(id, b_id);
+}
+
+QSqlQueryModel &DAO::show_taken_books(int r_id)
+{
+    QString str_template = "CALL get_reader_taken_books(%1)";
+    model->setQuery(str_template.arg(r_id));
+    if(model->lastError().isValid())
+        throw std::runtime_error(model->lastError().text().toStdString());
+
+    return *model;
+}
+
+QSqlQueryModel &DAO::show_taken_books()
+{
+    return show_taken_books(id);
+}
+
+QSqlQueryModel &DAO::show_debtor_books(int r_id)
+{
+    QString str_template = "CALL get_debtor_books_by_reader_id(%1)";
+    model->setQuery(str_template.arg(r_id));
+    if(model->lastError().isValid())
+        throw std::runtime_error(model->lastError().text().toStdString());
+
+    return *model;
+}
+
+QSqlQueryModel &DAO::show_debtor_books()
+{
+    return show_debtor_books(id);
 }
 
 bool DAO::createConnection()
