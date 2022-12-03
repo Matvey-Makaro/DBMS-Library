@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>7</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="authorization_as_page">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -66,7 +66,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_7">
+           <widget class="QPushButton" name="authorize_as_admin_btn">
             <property name="font">
              <font>
               <pointsize>12</pointsize>
@@ -78,7 +78,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_8">
+           <widget class="QPushButton" name="authorize_as_librarian_btn">
             <property name="font">
              <font>
               <pointsize>12</pointsize>
@@ -90,7 +90,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_6">
+           <widget class="QPushButton" name="authorize_as_reader_btn">
             <property name="font">
              <font>
               <pointsize>12</pointsize>
@@ -249,7 +249,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit"/>
+           <widget class="QLineEdit" name="login_line_edit"/>
           </item>
           <item>
            <spacer name="horizontalSpacer_5">
@@ -324,7 +324,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_2"/>
+           <widget class="QLineEdit" name="password_line_edit"/>
           </item>
           <item>
            <spacer name="horizontalSpacer_9">
@@ -357,7 +357,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="enter_authorize_btn">
             <property name="font">
              <font>
               <pointsize>12</pointsize>
@@ -600,7 +600,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_15">
+           <widget class="QPushButton" name="work_with_books_for_librarian_btn">
             <property name="font">
              <font>
               <pointsize>12</pointsize>
@@ -612,7 +612,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_12">
+           <widget class="QPushButton" name="works_with_readers_for_librarian_btn">
             <property name="font">
              <font>
               <pointsize>12</pointsize>
@@ -624,7 +624,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_13">
+           <widget class="QPushButton" name="work_with_debtors_for_librarian_btn">
             <property name="font">
              <font>
               <pointsize>12</pointsize>
@@ -636,7 +636,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_14">
+           <widget class="QPushButton" name="work_with_booked_book_for_librarian_btn">
             <property name="font">
              <font>
               <pointsize>12</pointsize>

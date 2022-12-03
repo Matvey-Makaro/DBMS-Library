@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 
     DAO dao;
 
-    MainWindow w;
+    MainWindow w(dao);
     w.show();
     return a.exec();
 }
