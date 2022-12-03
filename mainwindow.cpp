@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QString>
+#include <QDebug>
 
 enum Pages
 {
@@ -13,6 +14,7 @@ enum Pages
     WORK_WITH_READERS_FOR_LIBRARIAN = 5,
     WORK_WITH_DEBTORS_FOR_LIBRARIAN = 6,
     WORK_WITH_BOOKED_BOOK = 7,
+    ADD_BOOK_PAGE = 8,
 };
 
 MainWindow::MainWindow(DAO& dao, QWidget *parent)
@@ -83,4 +85,47 @@ void MainWindow::on_work_with_debtors_for_librarian_btn_clicked()
 void MainWindow::on_work_with_booked_book_for_librarian_btn_clicked()
 {
     stackedWidget->setCurrentIndex(WORK_WITH_BOOKED_BOOK);
+}
+
+void MainWindow::on_add_book_btn_clicked()
+{
+    stackedWidget->setCurrentIndex(ADD_BOOK_PAGE);
+}
+
+void MainWindow::on_show_all_books_for_librarian_btn_2_clicked()
+{
+    QSqlQueryModel& model = dao.show_all_books_for_librarian();
+    ui->work_with_books_for_librarian_table_view->setModel(&model);
+}
+
+void MainWindow::on_work_with_books_for_librarian_back_btn_clicked()
+{
+    stackedWidget->setCurrentIndex(START_LIBRARIAN_PAGE);
+    ui->work_with_books_for_librarian_table_view->setModel(nullptr);
+}
+
+void MainWindow::on_add_book_btn_2_clicked()
+{
+    BookInfo book_info;
+    book_info.book_name = ui->book_name_line_edit->text();
+    book_info.author_name = ui->author_name_line_edit->text();
+    book_info.author_surname = ui->author_surname_line_edit->text();
+    book_info.author_patronymic = ui->author_patronymic_line_edit->text();
+    book_info.author_pseudonym = ui->author_pseudonym_line_edit->text();
+    book_info.publication_year = ui->publication_year_line_edit->text().toInt();
+    book_info.publisher_name = ui->publisher_name_line_edit->text();
+    book_info.isbn = ui->isbn_line_edit->text();
+    book_info.amount = ui->book_amount_line_edit->text().toInt();
+
+    // TODO: Сделать диалоговые окна, которые будут говорит, что происходит
+    try
+    {
+        dao.add_book(book_info);
+    }  catch (std::exception& ex)
+    {
+        qDebug() << ex.what() << '\n';
+    }
+
+
+    stackedWidget->setCurrentIndex(WORK_WITH_BOOKS_FOR_LIBRARIAN);
 }

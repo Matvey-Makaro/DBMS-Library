@@ -35,6 +35,14 @@ private slots:
 
     void on_work_with_booked_book_for_librarian_btn_clicked();
 
+    void on_add_book_btn_clicked();
+
+    void on_show_all_books_for_librarian_btn_2_clicked();
+
+    void on_work_with_books_for_librarian_back_btn_clicked();
+
+    void on_add_book_btn_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     DAO& dao;

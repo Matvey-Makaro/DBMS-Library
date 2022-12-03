@@ -7,12 +7,14 @@
 #include <QSqlRecord>
 #include <exception>
 #include <cassert>
+#include <utility>
 
 DAO::DAO() :
     db_name("library"), db_user_name("root"), db_host_name("localhost"), db_password("admin")
 {
 
     createConnection();
+    model = std::unique_ptr<QSqlQueryModel>(new QSqlQueryModel);
     QSqlQuery query;
 //    QString str1 = "SET @CUR_ID = 1;";
 //    if (!query.exec(str1))
@@ -78,6 +80,56 @@ bool DAO::authorize(Role role, const QString& login, const QString& password)
 
 
     return true;
+}
+
+QSqlQueryModel& DAO::show_all_books_for_librarian()
+{
+    model->setQuery("SELECT * FROM books_info");
+
+    if(model->lastError().isValid())
+        throw std::runtime_error(model->lastError().text().toStdString());
+
+    return *model;
+}
+
+void DAO::add_book(const BookInfo &book_info)
+{
+    QString str_template = "CALL create_book('%1', '%2', '%3', '%4', '%5', %6, '%7', '%8', %9);";
+    QString str;
+    if(book_info.book_name.isEmpty())
+        throw std::runtime_error("Book name can't be empty.");
+    str = str_template.arg(book_info.book_name);
+
+    if(book_info.author_name.isEmpty())
+        str = str.arg("NULL");
+    else str = str.arg(book_info.author_name);
+
+    if(book_info.author_surname.isEmpty())
+        str = str.arg("NULL");
+    else str = str.arg(book_info.author_surname);
+
+    if(book_info.author_patronymic.isEmpty())
+        str = str.arg("NULL");
+    else str = str.arg(book_info.author_patronymic);
+
+    if(book_info.author_pseudonym.isEmpty())
+        str = str.arg("NULL");
+    else str = str.arg(book_info.author_pseudonym);
+
+    str = str.arg(book_info.publication_year);
+
+    if(book_info.publisher_name.isEmpty())
+        throw std::runtime_error("Publisher name can't be empty.");
+    str = str.arg(book_info.publisher_name);
+
+    if(book_info.isbn.isEmpty())
+        throw std::runtime_error("ISBN can't be empty.");
+    str = str.arg(book_info.isbn);
+
+    str = str.arg(book_info.amount);
+
+    QSqlQuery query;
+    make_query(query, str);
 }
 
 bool DAO::createConnection()
