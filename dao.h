@@ -35,6 +35,9 @@ public:
     bool authorize(Role role, const QString& login, const QString& password);
     QSqlQueryModel& show_all_books_for_librarian();
     void add_book(const BookInfo& book_info);
+    QSqlQueryModel& find_book_by_name(const QString& book_name);
+    QSqlQueryModel& show_booked_book_by_reader_id(int r_id);
+    void lend_book(int b_id, int r_id);
 private:
     bool createConnection();
     void make_query(QSqlQuery& query, const QString& query_str);

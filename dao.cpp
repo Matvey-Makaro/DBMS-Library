@@ -132,6 +132,35 @@ void DAO::add_book(const BookInfo &book_info)
     make_query(query, str);
 }
 
+QSqlQueryModel &DAO::find_book_by_name(const QString &book_name)
+{
+    QString str_template = "SELECT * FROM books_info WHERE book_name=('%1')";
+    model->setQuery(str_template.arg(book_name));
+
+    if(model->lastError().isValid())
+        throw std::runtime_error(model->lastError().text().toStdString());
+
+    return *model;
+}
+
+QSqlQueryModel &DAO::show_booked_book_by_reader_id(int r_id)
+{
+    QString str_template("CALL get_booked_books_by_reader_id(%1)");
+    model->setQuery(str_template.arg(r_id));
+    if(model->lastError().isValid())
+        throw std::runtime_error(model->lastError().text().toStdString());
+
+    return *model;
+
+}
+
+void DAO::lend_book(int b_id, int r_id)
+{
+    QString str_template = "CALL lend_book(%1, %2);";
+    QSqlQuery query;
+    make_query(query, str_template.arg(b_id).arg(r_id));
+}
+
 bool DAO::createConnection()
 {
     db = QSqlDatabase::addDatabase("QMYSQL");

@@ -43,6 +43,24 @@ private slots:
 
     void on_add_book_btn_2_clicked();
 
+    void on_find_book_for_librarianbtn_clicked();
+
+    void on_find_book_btn_clicked();
+
+    void on_show_booked_book_of_reader_btn_clicked();
+
+    void on_enter_reader_id_btn_clicked();
+
+    void on_lend_book_to_user_btn_clicked();
+
+    void on_pushButton_clicked();
+
+    void on_work_with_readers_for_librarian_back_btn_clicked();
+
+    void on_work_with_debtors_for_librarian_back_btn_clicked();
+
+    void on_work_with_booked_book_back_btn_clicked();
+
 private:
     Ui::MainWindow *ui;
     DAO& dao;
@@ -50,5 +68,7 @@ private:
     Role role;
 
     QStackedWidget* stackedWidget;
+
+    int entered_reader_id;
 };
 #endif // MAINWINDOW_H

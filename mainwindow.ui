@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>8</number>
+       <number>7</number>
       </property>
       <widget class="QWidget" name="authorization_as_page">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -768,7 +768,7 @@
       <widget class="QWidget" name="work_with_readers_for_librarian">
        <layout class="QHBoxLayout" name="horizontalLayout_26">
         <item>
-         <widget class="QTableView" name="tableView"/>
+         <widget class="QTableView" name="work_with_readers_for_librarian_table_view"/>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -834,6 +834,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="work_with_readers_for_librarian_back_btn">
+            <property name="text">
+             <string>Назад</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer_11">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -853,7 +860,7 @@
       <widget class="QWidget" name="work_with_debtors_for_librarian">
        <layout class="QHBoxLayout" name="horizontalLayout_27">
         <item>
-         <widget class="QTableView" name="tableView"/>
+         <widget class="QTableView" name="work_with_debtors_for_librarian_table_view"/>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -891,6 +898,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="work_with_debtors_for_librarian_back_btn">
+            <property name="text">
+             <string>Назад</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer_14">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -910,7 +924,7 @@
       <widget class="QWidget" name="work_with_booked_book">
        <layout class="QHBoxLayout" name="horizontalLayout_28">
         <item>
-         <widget class="QTableView" name="tableView_2"/>
+         <widget class="QTableView" name="work_with_booked_book_table_view"/>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -934,16 +948,23 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_23">
+           <widget class="QPushButton" name="show_booked_book_of_reader_btn">
             <property name="text">
              <string>Показать забронированные книги читателя</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_26">
+           <widget class="QPushButton" name="lend_book_to_user_btn">
             <property name="text">
-             <string>Отдать книгу</string>
+             <string>Выдать книгу</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="work_with_booked_book_back_btn">
+            <property name="text">
+             <string>Назад</string>
             </property>
            </widget>
           </item>
@@ -1182,6 +1203,195 @@
            <size>
             <width>20</width>
             <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="find_book_page">
+       <layout class="QHBoxLayout" name="horizontalLayout_12">
+        <item>
+         <spacer name="horizontalSpacer_17">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_15">
+          <item>
+           <spacer name="verticalSpacer_24">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_21">
+            <property name="font">
+             <font>
+              <pointsize>18</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Поиск</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_22">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_20">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Название книги</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="book_name_in_find_book_page_line_edit"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="find_book_btn">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Найти</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_23">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_18">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="enter_reader_id_page">
+       <layout class="QHBoxLayout" name="horizontalLayout_13">
+        <item>
+         <spacer name="horizontalSpacer_19">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_16">
+          <item>
+           <spacer name="verticalSpacer_25">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>Введите id читателя</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="enter_reader_id_line_edit"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="enter_reader_id_btn">
+            <property name="text">
+             <string>Показать</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_26">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_20">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
            </size>
           </property>
          </spacer>
