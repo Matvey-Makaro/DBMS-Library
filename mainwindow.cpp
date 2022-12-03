@@ -22,6 +22,7 @@ enum Pages
     WORK_WITH_BOOKS_FOR_READERS = 12,
     WORK_WITH_BOOKED_BOOK_FOR_READER = 13,
     INFORMATION_ABOUT_READER = 14,
+    START_ADMIN_PAGE = 15,
 };
 
 MainWindow::MainWindow(DAO& dao, QWidget *parent)
@@ -75,9 +76,8 @@ void MainWindow::on_enter_authorize_btn_clicked()
 
         if(role == Role::LIBRARIAN)
             stackedWidget->setCurrentIndex(START_LIBRARIAN_PAGE);
-        // TODO: Добавить стартовое окно для администратора.
-//        else if(role == Role::ADMIN)
-//            stackedWidget->setCurrentIndex()
+        else if(role == Role::ADMIN)
+            stackedWidget->setCurrentIndex(START_ADMIN_PAGE);
         else assert(0);
     }
     catch (std::exception& ex)
