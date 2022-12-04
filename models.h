@@ -27,4 +27,9 @@ struct LibrarianInfo
     QString email;
 };
 
+struct RoomInfo
+{
+    QString name;
+};
+
 #endif // MODELS_H

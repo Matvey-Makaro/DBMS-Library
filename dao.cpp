@@ -320,6 +320,43 @@ void DAO::delete_librarian(int librarian_id)
     make_query(query, QString("CALL delete_librarian_by_id(%1);").arg(librarian_id));
 }
 
+QSqlQueryModel &DAO::show_all_rooms()
+{
+    model->setQuery("CALL get_all_rooms()");
+    if(model->lastError().isValid())
+        throw std::runtime_error(model->lastError().text().toStdString());
+
+    return *model;
+}
+
+void DAO::create_room(const RoomInfo &room_info)
+{
+    QString str_template("CALL create_room('%1');");
+    QString str;
+
+    if(room_info.name.isEmpty())
+        throw std::runtime_error("Room name can't be empty.");
+    str = str_template.arg(room_info.name);
+
+    QSqlQuery query;
+    make_query(query, str);
+}
+
+void DAO::update_room(int room_id, const RoomInfo &room_info)
+{
+    QString str_template("CALL set_name_to_room(%1, '%2');");
+    QSqlQuery query;
+
+    if(!room_info.name.isEmpty())
+        make_query(query, str_template.arg(room_id).arg(room_info.name));
+}
+
+void DAO::delete_room(int room_id)
+{
+    QSqlQuery query;
+    make_query(query, QString("CALL delete_room_by_id(%1);").arg(room_id));
+}
+
 bool DAO::createConnection()
 {
     db = QSqlDatabase::addDatabase("QMYSQL");

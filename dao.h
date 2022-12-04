@@ -41,6 +41,10 @@ public:
     void create_librarian(const LibrarianInfo& librarian_info);
     void update_librarian(int librarian_id, const LibrarianInfo& librarian_info);
     void delete_librarian(int librarian_id);
+    QSqlQueryModel& show_all_rooms();
+    void create_room(const RoomInfo& room_info);
+    void update_room(int room_id, const RoomInfo& room_info);
+    void delete_room(int room_id);
 
 private:
     bool createConnection();

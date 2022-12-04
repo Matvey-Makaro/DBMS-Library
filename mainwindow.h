@@ -109,6 +109,20 @@ private slots:
 
     void on_work_with_librarians_back_btn_clicked();
 
+    void on_show_rooms_on_work_with_rooms_page_btn_clicked();
+
+    void on_add_room_on_work_with_rooms_page_btn_clicked();
+
+    void on_update_room_on_work_with_rooms_page_btn_clicked();
+
+    void on_fill_room_information_page_back_btn_clicked();
+
+    void on_add_room_on_fill_room_info_page_btn_clicked();
+
+    void on_delete_room_on_work_with_rooms_page_btn_clicked();
+
+    void on_work_with_rooms_page_back_btn_clicked();
+
 private:
     Ui::MainWindow *ui;
     DAO& dao;
@@ -119,6 +133,7 @@ private:
 
     int entered_reader_id;
     int current_librarian_id;
+    int current_room_id;
     bool is_creation_now;
 };
 #endif // MAINWINDOW_H

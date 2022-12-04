@@ -26,6 +26,7 @@ enum Pages
     WORK_WITH_LIBRARIANS_PAGE = 16,
     WORK_WITH_ROOMS_PAGE = 17,
     ADD_LIBRARIAN_PAGE = 18,
+    FILL_ROOM_INFORMATION_PAGE = 19,
 };
 
 MainWindow::MainWindow(DAO& dao, QWidget *parent)
@@ -543,5 +544,112 @@ void MainWindow::on_delete_librarian_for_admin_btn_clicked()
 void MainWindow::on_work_with_librarians_back_btn_clicked()
 {
     ui->work_with_librarians_table_view->setModel(nullptr);
+    stackedWidget->setCurrentIndex(START_ADMIN_PAGE);
+}
+
+void MainWindow::on_show_rooms_on_work_with_rooms_page_btn_clicked()
+{
+    try
+    {
+        auto& model = dao.show_all_rooms();
+        ui->work_with_rooms_page_table_view->setModel(&model);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_add_room_on_work_with_rooms_page_btn_clicked()
+{
+    try
+    {
+        ui->add_room_on_fill_room_info_page_btn->setText("Добавить");
+        is_creation_now = true;
+
+        ui->work_with_rooms_page_table_view->setModel(nullptr);
+        stackedWidget->setCurrentIndex(FILL_ROOM_INFORMATION_PAGE);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_update_room_on_work_with_rooms_page_btn_clicked()
+{
+    try
+    {
+        ui->add_room_on_fill_room_info_page_btn->setText("Изменить");
+        is_creation_now = false;
+
+        auto* const view = ui->work_with_rooms_page_table_view;
+        const auto* model = view->model();
+        if(model == nullptr)
+            return;
+
+        current_room_id = model->index(view->currentIndex().row(), 0).data().toInt();
+        view->setModel(nullptr);
+
+        stackedWidget->setCurrentIndex(FILL_ROOM_INFORMATION_PAGE);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_fill_room_information_page_back_btn_clicked()
+{
+    stackedWidget->setCurrentIndex(WORK_WITH_ROOMS_PAGE);
+}
+
+void MainWindow::on_add_room_on_fill_room_info_page_btn_clicked()
+{
+    try
+    {
+        RoomInfo room_info;
+        room_info.name = ui->room_name_line_edti->text();
+
+        if(is_creation_now)
+            dao.create_room(room_info);
+        else dao.update_room(current_room_id, room_info);
+
+        stackedWidget->setCurrentIndex(WORK_WITH_ROOMS_PAGE);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_delete_room_on_work_with_rooms_page_btn_clicked()
+{
+    try
+    {
+        auto* const view = ui->work_with_rooms_page_table_view;
+        const auto* model = view->model();
+        if(model == nullptr)
+            return;
+
+        current_room_id = model->index(view->currentIndex().row(), 0).data().toInt();
+        dao.delete_room(current_room_id);
+        current_room_id = 0;
+        view->setModel(nullptr);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_work_with_rooms_page_back_btn_clicked()
+{
+    ui->work_with_rooms_page_table_view->setModel(nullptr);
     stackedWidget->setCurrentIndex(START_ADMIN_PAGE);
 }
