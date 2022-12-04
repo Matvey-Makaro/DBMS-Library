@@ -23,6 +23,9 @@ enum Pages
     WORK_WITH_BOOKED_BOOK_FOR_READER = 13,
     INFORMATION_ABOUT_READER = 14,
     START_ADMIN_PAGE = 15,
+    WORK_WITH_LIBRARIANS_PAGE = 16,
+    WORK_WITH_ROOMS_PAGE = 17,
+    ADD_LIBRARIAN_PAGE = 18,
 };
 
 MainWindow::MainWindow(DAO& dao, QWidget *parent)
@@ -422,4 +425,123 @@ void MainWindow::on_show_taken_books_for_reader_btn_clicked()
 void MainWindow::on_add_book_back_btn_clicked()
 {
     stackedWidget->setCurrentIndex(WORK_WITH_BOOKS_FOR_LIBRARIAN);
+}
+
+void MainWindow::on_work_with_librarians_btn_clicked()
+{
+    stackedWidget->setCurrentIndex(WORK_WITH_LIBRARIANS_PAGE);
+}
+
+void MainWindow::on_work_with_rooms_btn_clicked()
+{
+    stackedWidget->setCurrentIndex(WORK_WITH_ROOMS_PAGE);
+}
+
+void MainWindow::on_show_all_librarians_for_admin_btn_clicked()
+{
+    try
+    {
+        auto& model = dao.show_all_librarians();
+        ui->work_with_librarians_table_view->setModel(&model);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+
+
+void MainWindow::on_add_librarian_for_admin_btn_clicked()
+{
+    ui->top_add_librarian_page_label->setText("Заполните данные библиотекаря:");
+    ui->add_librarian_on_add_librarian_page_btn->setText("Добавить");
+    is_creation_now = true;
+
+    ui->work_with_librarians_table_view->setModel(nullptr);
+    stackedWidget->setCurrentIndex(ADD_LIBRARIAN_PAGE);
+}
+
+void MainWindow::on_add_librarian_on_add_librarian_page_btn_clicked()
+{
+    try
+    {
+        LibrarianInfo librarian_info;
+        librarian_info.login = ui->login_for_librarian_line_edit->text();
+        librarian_info.password = ui->password_for_librarian_line_edit->text();
+        librarian_info.name = ui->name_for_librarian_line_edit->text();
+        librarian_info.surname = ui->surname_for_librarian_line_edit->text();
+        librarian_info.patronymic = ui->patronymic_for_librarian_line_edit->text();
+        librarian_info.phone = ui->phone_for_librarian_line_edit->text();
+        librarian_info.email = ui->email_for_librarian_line_edit->text();
+
+        if(is_creation_now)
+            dao.create_librarian(librarian_info);
+        else dao.update_librarian(current_librarian_id, librarian_info);
+
+        stackedWidget->setCurrentIndex(WORK_WITH_LIBRARIANS_PAGE);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_add_librarian_back_btn_clicked()
+{
+    stackedWidget->setCurrentIndex(WORK_WITH_LIBRARIANS_PAGE);
+}
+
+void MainWindow::on_update_librarian_for_admin_btn_clicked()
+{
+    try
+    {
+        ui->top_add_librarian_page_label->setText("Измените данные библиотекаря:");
+        ui->add_librarian_on_add_librarian_page_btn->setText("Изменить");
+        is_creation_now = false;
+
+        auto* const view = ui->work_with_librarians_table_view;
+        const auto* model = view->model();
+        if(model == nullptr)
+            return;
+
+        current_librarian_id = model->index(view->currentIndex().row(), 0).data().toInt();
+        view->setModel(nullptr);
+
+        stackedWidget->setCurrentIndex(ADD_LIBRARIAN_PAGE);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_delete_librarian_for_admin_btn_clicked()
+{
+    try
+    {
+        auto* const view = ui->work_with_librarians_table_view;
+        const auto* model = view->model();
+        if(model == nullptr)
+            return;
+
+        current_librarian_id = model->index(view->currentIndex().row(), 0).data().toInt();
+        dao.delete_librarian(current_librarian_id);
+        current_librarian_id = 0;
+        view->setModel(nullptr);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_work_with_librarians_back_btn_clicked()
+{
+    ui->work_with_librarians_table_view->setModel(nullptr);
+    stackedWidget->setCurrentIndex(START_ADMIN_PAGE);
 }

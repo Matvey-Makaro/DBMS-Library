@@ -91,6 +91,24 @@ private slots:
 
     void on_add_book_back_btn_clicked();
 
+    void on_show_all_librarians_for_admin_btn_clicked();
+
+    void on_work_with_librarians_btn_clicked();
+
+    void on_work_with_rooms_btn_clicked();
+
+    void on_add_librarian_for_admin_btn_clicked();
+
+    void on_add_librarian_on_add_librarian_page_btn_clicked();
+
+    void on_add_librarian_back_btn_clicked();
+
+    void on_update_librarian_for_admin_btn_clicked();
+
+    void on_delete_librarian_for_admin_btn_clicked();
+
+    void on_work_with_librarians_back_btn_clicked();
+
 private:
     Ui::MainWindow *ui;
     DAO& dao;
@@ -100,5 +118,7 @@ private:
     QStackedWidget* stackedWidget;
 
     int entered_reader_id;
+    int current_librarian_id;
+    bool is_creation_now;
 };
 #endif // MAINWINDOW_H

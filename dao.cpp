@@ -247,6 +247,79 @@ QSqlQueryModel &DAO::show_debtor_books()
     return show_debtor_books(id);
 }
 
+QSqlQueryModel &DAO::show_all_librarians()
+{
+    model->setQuery("CALL get_all_librarians()");
+    if(model->lastError().isValid())
+        throw std::runtime_error(model->lastError().text().toStdString());
+
+    return *model;
+}
+
+void DAO::create_librarian(const LibrarianInfo &librarian_info)
+{
+    QString str_template("CALL create_librarian('%1', '%2', '%3', '%4', '%5', %6, %7);");
+    QString str;
+
+    if(librarian_info.login.isEmpty())
+        throw std::runtime_error("Login can't be empty.");
+    str = str_template.arg(librarian_info.login);
+
+    if(librarian_info.password.isEmpty())
+        throw std::runtime_error("Password can't be empty.");
+    str = str.arg(librarian_info.password);
+
+    if(librarian_info.name.isEmpty())
+        throw std::runtime_error("Name can't be empty.");
+    str = str.arg(librarian_info.name);
+
+    if(librarian_info.surname.isEmpty())
+        throw std::runtime_error("Surname can't be empty.");
+    str = str.arg(librarian_info.surname);
+
+    if(librarian_info.patronymic.isEmpty())
+        throw std::runtime_error("Patronymic can't be empty.");
+    str = str.arg(librarian_info.patronymic);
+
+    if(librarian_info.phone.isEmpty())
+        str = str.arg("NULL");
+    else str = str.arg(QString("'%1'").arg(librarian_info.phone));
+
+    if(librarian_info.email.isEmpty())
+        str = str.arg("NULL");
+    else str = str.arg(QString("'%1'").arg(librarian_info.email));
+
+
+    QSqlQuery query;
+    make_query(query, str);
+}
+
+void DAO::update_librarian(int librarian_id, const LibrarianInfo &librarian_info)
+{
+    QSqlQuery query;
+
+    if(!librarian_info.login.isEmpty())
+        make_query(query, QString("CALL set_login_to_librarian(%1, '%2');").arg(librarian_id).arg(librarian_info.login));
+    if(!librarian_info.password.isEmpty())
+        make_query(query, QString("CALL set_password_to_librarian(%1, '%2');").arg(librarian_id).arg(librarian_info.password));
+    if(!librarian_info.name.isEmpty())
+        make_query(query, QString("CALL set_name_to_librarian(%1, '%2');").arg(librarian_id).arg(librarian_info.name));
+    if(!librarian_info.surname.isEmpty())
+        make_query(query, QString("CALL set_surname_to_librarian(%1, '%2');").arg(librarian_id).arg(librarian_info.surname));
+    if(!librarian_info.patronymic.isEmpty())
+        make_query(query, QString("CALL set_patronymic_to_librarian(%1, '%2');").arg(librarian_id).arg(librarian_info.patronymic));
+    if(!librarian_info.phone.isEmpty())
+        make_query(query, QString("CALL set_phone_to_librarian(%1, '%2');").arg(librarian_id).arg(librarian_info.phone));
+    if(!librarian_info.email.isEmpty())
+        make_query(query, QString("CALL set_email_to_librarian(%1, '%2');").arg(librarian_id).arg(librarian_info.email));
+}
+
+void DAO::delete_librarian(int librarian_id)
+{
+    QSqlQuery query;
+    make_query(query, QString("CALL delete_librarian_by_id(%1);").arg(librarian_id));
+}
+
 bool DAO::createConnection()
 {
     db = QSqlDatabase::addDatabase("QMYSQL");

@@ -1,6 +1,8 @@
 #ifndef DAO_H
 #define DAO_H
 
+#include "models.h"
+
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
@@ -12,19 +14,6 @@ enum class Role
     READER,
     LIBRARIAN,
     ADMIN
-};
-
-struct BookInfo
-{
-    QString book_name;
-    QString author_name;
-    QString author_surname;
-    QString author_patronymic;
-    QString author_pseudonym;
-    int publication_year;
-    QString publisher_name;
-    QString isbn;
-    int amount;
 };
 
 class DAO
@@ -48,6 +37,10 @@ public:
     QSqlQueryModel& show_taken_books();
     QSqlQueryModel& show_debtor_books(int r_id);
     QSqlQueryModel& show_debtor_books();
+    QSqlQueryModel& show_all_librarians();
+    void create_librarian(const LibrarianInfo& librarian_info);
+    void update_librarian(int librarian_id, const LibrarianInfo& librarian_info);
+    void delete_librarian(int librarian_id);
 
 private:
     bool createConnection();

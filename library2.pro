@@ -16,7 +16,8 @@ SOURCES += \
 
 HEADERS += \
     dao.h \
-    mainwindow.h
+    mainwindow.h \
+    models.h
 
 FORMS += \
     mainwindow.ui
