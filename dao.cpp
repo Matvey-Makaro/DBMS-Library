@@ -132,6 +132,12 @@ void DAO::add_book(const BookInfo &book_info)
     make_query(query, str);
 }
 
+void DAO::delete_book(int book_id)
+{
+    QSqlQuery query;
+    make_query(query, QString("CALL delete_book_by_id(%1);").arg(book_id));
+}
+
 QSqlQueryModel &DAO::find_book_by_name(const QString &book_name)
 {
     QString str_template = "SELECT * FROM books_info WHERE book_name=('%1')";

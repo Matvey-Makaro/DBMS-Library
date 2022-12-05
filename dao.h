@@ -24,6 +24,7 @@ public:
     bool authorize(Role role, const QString& login, const QString& password);
     QSqlQueryModel& show_all_books_for_librarian();
     void add_book(const BookInfo& book_info);
+    void delete_book(int book_id);
     QSqlQueryModel& find_book_by_name(const QString& book_name);
     QSqlQueryModel& show_booked_book_by_reader_id(int r_id);
     QSqlQueryModel& show_booked_book();

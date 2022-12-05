@@ -32,4 +32,16 @@ struct RoomInfo
     QString name;
 };
 
+struct ReaderInfo
+{
+    QString name;
+    QString surname;
+    QString patronymic;
+    QString phone;
+    QString email;
+    QString address;
+    QString passport_series;
+    QString passport_number;
+};
+
 #endif // MODELS_H

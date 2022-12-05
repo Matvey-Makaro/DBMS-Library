@@ -123,6 +123,20 @@ private slots:
 
     void on_work_with_rooms_page_back_btn_clicked();
 
+    void on_update_book_btn_clicked();
+
+    void on_delete_book_btn_clicked();
+
+    void on_add_reader_for_librarian_btn_clicked();
+
+    void on_add_reader_page_back_btn_clicked();
+
+    void on_add_for_add_reader_page_btn_clicked();
+
+    void on_show_all_readers_for_librarian_btn_clicked();
+
+    void on_update_reader_for_librarian_btn_clicked();
+
 private:
     Ui::MainWindow *ui;
     DAO& dao;
@@ -134,6 +148,8 @@ private:
     int entered_reader_id;
     int current_librarian_id;
     int current_room_id;
+    int current_book_id;
+    int current_reader_id;
     bool is_creation_now;
 };
 #endif // MAINWINDOW_H

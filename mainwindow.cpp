@@ -27,6 +27,7 @@ enum Pages
     WORK_WITH_ROOMS_PAGE = 17,
     ADD_LIBRARIAN_PAGE = 18,
     FILL_ROOM_INFORMATION_PAGE = 19,
+    ADD_READER_PAGE = 20,
 };
 
 MainWindow::MainWindow(DAO& dao, QWidget *parent)
@@ -114,6 +115,11 @@ void MainWindow::on_work_with_booked_book_for_librarian_btn_clicked()
 
 void MainWindow::on_add_book_btn_clicked()
 {
+    ui->main_add_book_label->setText("Заполните данные книги:");
+    ui->add_book_btn_2->setText("Добавить");
+    is_creation_now = false;
+
+    ui->work_with_books_for_librarian_table_view->setModel(nullptr);
     stackedWidget->setCurrentIndex(ADD_BOOK_PAGE);
 }
 
@@ -652,4 +658,118 @@ void MainWindow::on_work_with_rooms_page_back_btn_clicked()
 {
     ui->work_with_rooms_page_table_view->setModel(nullptr);
     stackedWidget->setCurrentIndex(START_ADMIN_PAGE);
+}
+
+void MainWindow::on_update_book_btn_clicked()
+{
+//    try
+//    {
+//        ui->main_add_book_label->setText("Измените данные книги");
+//        ui->add_book_btn_2->setText("Изменить");
+//        is_creation_now = false;
+
+//        auto* const view = ui->work_with_books_for_librarian_table_view;
+//        const auto* model = view->model();
+//        if(model == nullptr)
+//            return;
+
+//        current_room_id = model->index(view->currentIndex().row(), 0).data().toInt();
+//        view->setModel(nullptr);
+
+//        stackedWidget->setCurrentIndex(FILL_ROOM_INFORMATION_PAGE);
+//    }
+//    catch (std::exception& ex)
+//    {
+//        QMessageBox::warning(this, "Error", ex.what());
+//        qDebug() << ex.what() << '\n';
+//    }
+}
+
+void MainWindow::on_delete_book_btn_clicked()
+{
+    try
+    {
+        auto* const view = ui->work_with_books_for_librarian_table_view;
+        const auto* model = view->model();
+        if(model == nullptr)
+            return;
+
+        current_book_id = model->index(view->currentIndex().row(), 0).data().toInt();
+        dao.delete_book(current_book_id);
+        current_book_id = 0;
+        view->setModel(nullptr);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_add_reader_for_librarian_btn_clicked()
+{
+    try
+    {
+        ui->add_for_add_reader_page_btn->setText("Добавить");
+        is_creation_now = true;
+
+        ui->work_with_rooms_page_table_view->setModel(nullptr);
+        stackedWidget->setCurrentIndex(ADD_READER_PAGE);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_add_reader_page_back_btn_clicked()
+{
+    stackedWidget->setCurrentIndex(WORK_WITH_READERS_FOR_LIBRARIAN);
+}
+
+void MainWindow::on_add_for_add_reader_page_btn_clicked()
+{
+    try
+    {
+        ui->add_for_add_reader_page_btn->setText("Добавить");
+        is_creation_now = true;
+
+        ui->work_with_readers_for_librarian_table_view->setModel(nullptr);
+        stackedWidget->setCurrentIndex(ADD_READER_PAGE);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_show_all_readers_for_librarian_btn_clicked()
+{
+
+}
+
+void MainWindow::on_update_reader_for_librarian_btn_clicked()
+{
+    try
+    {
+        ui->add_for_add_reader_page_btn->setText("Изменить");
+        is_creation_now = false;
+
+        auto* const view = ui->work_with_readers_for_librarian_table_view;
+        const auto* model = view->model();
+        if(model == nullptr)
+            return;
+
+        current_reader_id = model->index(view->currentIndex().row(), 0).data().toInt();
+        view->setModel(nullptr);
+
+        stackedWidget->setCurrentIndex(ADD_READER_PAGE);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
 }
