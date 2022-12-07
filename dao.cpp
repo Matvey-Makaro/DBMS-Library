@@ -363,6 +363,82 @@ void DAO::delete_room(int room_id)
     make_query(query, QString("CALL delete_room_by_id(%1);").arg(room_id));
 }
 
+QSqlQueryModel &DAO::show_all_readers()
+{
+    model->setQuery("SELECT * FROM readers_info");
+    if(model->lastError().isValid())
+        throw std::runtime_error(model->lastError().text().toStdString());
+
+    return *model;
+}
+
+void DAO::create_reader(const ReaderInfo &reader_info)
+{
+    QString str_template("CALL create_reader('%1', '%2', %3, '%4', '%5', %6, %7, %8);");
+    QString str;
+
+    if(reader_info.name.isEmpty())
+        throw std::runtime_error("Reader name can't be empty.");
+    str = str_template.arg(reader_info.name);
+
+    if(reader_info.surname.isEmpty())
+        throw std::runtime_error("Reader surname can't be empty.");
+    str = str.arg(reader_info.surname);
+
+    if(reader_info.patronymic.isEmpty())
+        str = str.arg("NULL");
+    else str = str.arg(QString("'%1'").arg(reader_info.patronymic));
+
+    if(reader_info.passport_series.isEmpty())
+        throw std::runtime_error("Reader passport series can't be empty.");
+    str = str.arg(reader_info.passport_series);
+
+    if(reader_info.passport_number.isEmpty())
+        throw std::runtime_error("Reader passport number can't be empty.");
+    str = str.arg(reader_info.passport_number);
+
+    if(reader_info.phone.isEmpty())
+        str = str.arg("NULL");
+    else str = str.arg(QString("'%1'").arg(reader_info.phone));
+
+    if(reader_info.email.isEmpty())
+        str = str.arg("NULL");
+    else str = str.arg(QString("'%1'").arg(reader_info.email));
+
+    if(reader_info.address.isEmpty())
+        str = str.arg("NULL");
+    else str = str.arg(QString("'%1'").arg(reader_info.address));
+
+    QSqlQuery query;
+    make_query(query, str);
+}
+
+void DAO::update_reader(int reader_id, const ReaderInfo &reader_info)
+{
+    QSqlQuery query;
+
+    if(!reader_info.name.isEmpty())
+        make_query(query, QString("CALL set_name_to_reader(%1, '%2');").arg(reader_id).arg(reader_info.name));
+    if(!reader_info.surname.isEmpty())
+        make_query(query, QString("CALL set_surname_to_reader(%1, '%2');").arg(reader_id).arg(reader_info.surname));
+    if(!reader_info.patronymic.isEmpty())
+        make_query(query, QString("CALL set_patronymic_to_reader(%1, '%2');").arg(reader_id).arg(reader_info.patronymic));
+    if(!reader_info.passport_series.isEmpty() && !reader_info.passport_number.isEmpty())
+        make_query(query, QString("CALL set_passport_to_reader(%1, '%2', '%3');").arg(reader_id).arg(reader_info.passport_series).arg(reader_info.passport_number));
+    if(!reader_info.phone.isEmpty())
+        make_query(query, QString("CALL set_phone_to_reader(%1, '%2');").arg(reader_id).arg(reader_info.phone));
+    if(!reader_info.email.isEmpty())
+        make_query(query, QString("CALL set_email_to_reader(%1, '%2');").arg(reader_id).arg(reader_info.email));
+    if(!reader_info.address.isEmpty())
+        make_query(query, QString("CALL set_address_to_reader(%1, '%2');").arg(reader_id).arg(reader_info.address));
+}
+
+void DAO::delete_reader(int reader_id)
+{
+    QSqlQuery query;
+    make_query(query, QString("CALL delete_reader_by_id(%1);").arg(reader_id));
+}
+
 bool DAO::createConnection()
 {
     db = QSqlDatabase::addDatabase("QMYSQL");

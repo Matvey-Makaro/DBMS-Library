@@ -137,6 +137,10 @@ private slots:
 
     void on_update_reader_for_librarian_btn_clicked();
 
+    void on_add_or_update_for_add_reader_page_btn_clicked();
+
+    void on_delete_reader_for_librarian_btn_clicked();
+
 private:
     Ui::MainWindow *ui;
     DAO& dao;

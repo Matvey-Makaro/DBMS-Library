@@ -710,7 +710,7 @@ void MainWindow::on_add_reader_for_librarian_btn_clicked()
 {
     try
     {
-        ui->add_for_add_reader_page_btn->setText("Добавить");
+        ui->add_or_update_for_add_reader_page_btn->setText("Добавить");
         is_creation_now = true;
 
         ui->work_with_rooms_page_table_view->setModel(nullptr);
@@ -730,13 +730,15 @@ void MainWindow::on_add_reader_page_back_btn_clicked()
 
 void MainWindow::on_add_for_add_reader_page_btn_clicked()
 {
+    // DON'T DELETE.
+}
+
+void MainWindow::on_show_all_readers_for_librarian_btn_clicked()
+{
     try
     {
-        ui->add_for_add_reader_page_btn->setText("Добавить");
-        is_creation_now = true;
-
-        ui->work_with_readers_for_librarian_table_view->setModel(nullptr);
-        stackedWidget->setCurrentIndex(ADD_READER_PAGE);
+        auto& model = dao.show_all_readers();
+        ui->work_with_readers_for_librarian_table_view->setModel(&model);
     }
     catch (std::exception& ex)
     {
@@ -745,16 +747,11 @@ void MainWindow::on_add_for_add_reader_page_btn_clicked()
     }
 }
 
-void MainWindow::on_show_all_readers_for_librarian_btn_clicked()
-{
-
-}
-
 void MainWindow::on_update_reader_for_librarian_btn_clicked()
 {
     try
     {
-        ui->add_for_add_reader_page_btn->setText("Изменить");
+        ui->add_or_update_for_add_reader_page_btn->setText("Изменить");
         is_creation_now = false;
 
         auto* const view = ui->work_with_readers_for_librarian_table_view;
@@ -766,6 +763,66 @@ void MainWindow::on_update_reader_for_librarian_btn_clicked()
         view->setModel(nullptr);
 
         stackedWidget->setCurrentIndex(ADD_READER_PAGE);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_add_or_update_for_add_reader_page_btn_clicked()
+{
+    try
+    {
+        ReaderInfo reader_info;
+        reader_info.name = ui->name_for_add_reader_line_edit->text();
+        reader_info.surname = ui->surname_for_add_reader_line_edit->text();
+        reader_info.patronymic = ui->patronymic_for_add_reader_line_edit->text();
+        reader_info.phone = ui->phone_for_add_reader_line_edit->text();
+        reader_info.email = ui->email_for_add_reader_line_edit->text();
+        reader_info.address = ui->address_for_add_reader_line_edit->text();
+        reader_info.passport_series = ui->passport_series_for_add_reader_line_edit->text();
+        reader_info.passport_number = ui->passport_number_for_add_reader_line_edit->text();
+
+        if(!reader_info.passport_number.isEmpty() && reader_info.passport_series.isEmpty())
+        {
+            QMessageBox::warning(this, "Error", "Passport series cannot be empty if the passport number is not empty.");
+            return;
+        }
+
+        else if(reader_info.passport_number.isEmpty() && !reader_info.passport_series.isEmpty())
+        {
+            QMessageBox::warning(this, "Error", "Passport number cannot be empty if the passport series is not empty.");
+            return;
+        }
+
+        if(is_creation_now)
+            dao.create_reader(reader_info);
+        else dao.update_reader(current_reader_id, reader_info);
+
+        stackedWidget->setCurrentIndex(WORK_WITH_READERS_FOR_LIBRARIAN);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_delete_reader_for_librarian_btn_clicked()
+{
+    try
+    {
+        auto* const view = ui->work_with_readers_for_librarian_table_view;
+        const auto* model = view->model();
+        if(model == nullptr)
+            return;
+
+        current_reader_id = model->index(view->currentIndex().row(), 0).data().toInt();
+        dao.delete_reader(current_reader_id);
+        current_reader_id = 0;
+        view->setModel(nullptr);
     }
     catch (std::exception& ex)
     {

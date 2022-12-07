@@ -2517,7 +2517,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="add_for_add_reader_page_btn">
+           <widget class="QPushButton" name="add_or_update_for_add_reader_page_btn">
             <property name="text">
              <string>Добавить</string>
             </property>

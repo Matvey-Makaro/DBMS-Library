@@ -46,6 +46,10 @@ public:
     void create_room(const RoomInfo& room_info);
     void update_room(int room_id, const RoomInfo& room_info);
     void delete_room(int room_id);
+    QSqlQueryModel& show_all_readers();
+    void create_reader(const ReaderInfo& reader_info);
+    void update_reader(int reader_id, const ReaderInfo& reader_info);
+    void delete_reader(int reader_id);
 
 private:
     bool createConnection();
