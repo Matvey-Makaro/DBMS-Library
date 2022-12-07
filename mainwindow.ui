@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>5</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="authorization_as_page">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -877,14 +877,14 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_25">
+           <widget class="QPushButton" name="show_all_debtors_for_librarian_btn">
             <property name="text">
              <string>Показать всех должников</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_24">
+           <widget class="QPushButton" name="show_readers_debts_btn">
             <property name="text">
              <string>Показать долги читателя</string>
             </property>

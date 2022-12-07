@@ -223,6 +223,13 @@ void DAO::cancle_booking(int b_id)
     cancle_booking(id, b_id);
 }
 
+void DAO::accept_book_from_reader(int book_id, int reader_id)
+{
+    QString str_template = "CALL accept_book_from_reader(%1, %2);";
+    QSqlQuery query;
+    make_query(query, str_template.arg(book_id).arg(reader_id));
+}
+
 QSqlQueryModel &DAO::show_taken_books(int r_id)
 {
     QString str_template = "CALL get_reader_taken_books(%1)";
@@ -437,6 +444,15 @@ void DAO::delete_reader(int reader_id)
 {
     QSqlQuery query;
     make_query(query, QString("CALL delete_reader_by_id(%1);").arg(reader_id));
+}
+
+QSqlQueryModel &DAO::show_all_debtors()
+{
+    model->setQuery("CALL get_all_debtors()");
+    if(model->lastError().isValid())
+        throw std::runtime_error(model->lastError().text().toStdString());
+
+    return *model;
 }
 
 bool DAO::createConnection()

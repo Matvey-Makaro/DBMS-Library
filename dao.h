@@ -34,6 +34,7 @@ public:
     void book_book(int b_id);
     void cancle_booking(int r_id, int b_id);
     void cancle_booking(int b_id);
+    void accept_book_from_reader(int book_id, int reader_id);
     QSqlQueryModel& show_taken_books(int r_id);
     QSqlQueryModel& show_taken_books();
     QSqlQueryModel& show_debtor_books(int r_id);
@@ -50,6 +51,7 @@ public:
     void create_reader(const ReaderInfo& reader_info);
     void update_reader(int reader_id, const ReaderInfo& reader_info);
     void delete_reader(int reader_id);
+    QSqlQueryModel& show_all_debtors();
 
 private:
     bool createConnection();

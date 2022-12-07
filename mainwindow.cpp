@@ -714,6 +714,7 @@ void MainWindow::on_add_reader_for_librarian_btn_clicked()
         is_creation_now = true;
 
         ui->work_with_rooms_page_table_view->setModel(nullptr);
+        is_get_book_from_reader_for_librarian_btn_enable = false;
         stackedWidget->setCurrentIndex(ADD_READER_PAGE);
     }
     catch (std::exception& ex)
@@ -739,6 +740,7 @@ void MainWindow::on_show_all_readers_for_librarian_btn_clicked()
     {
         auto& model = dao.show_all_readers();
         ui->work_with_readers_for_librarian_table_view->setModel(&model);
+        is_get_book_from_reader_for_librarian_btn_enable = false;
     }
     catch (std::exception& ex)
     {
@@ -751,6 +753,9 @@ void MainWindow::on_update_reader_for_librarian_btn_clicked()
 {
     try
     {
+        if(is_get_book_from_reader_for_librarian_btn_enable)
+            return;
+
         ui->add_or_update_for_add_reader_page_btn->setText("Изменить");
         is_creation_now = false;
 
@@ -761,6 +766,7 @@ void MainWindow::on_update_reader_for_librarian_btn_clicked()
 
         current_reader_id = model->index(view->currentIndex().row(), 0).data().toInt();
         view->setModel(nullptr);
+        is_get_book_from_reader_for_librarian_btn_enable = false;
 
         stackedWidget->setCurrentIndex(ADD_READER_PAGE);
     }
@@ -801,6 +807,7 @@ void MainWindow::on_add_or_update_for_add_reader_page_btn_clicked()
             dao.create_reader(reader_info);
         else dao.update_reader(current_reader_id, reader_info);
 
+        is_get_book_from_reader_for_librarian_btn_enable = false;
         stackedWidget->setCurrentIndex(WORK_WITH_READERS_FOR_LIBRARIAN);
     }
     catch (std::exception& ex)
@@ -814,6 +821,9 @@ void MainWindow::on_delete_reader_for_librarian_btn_clicked()
 {
     try
     {
+        if(is_get_book_from_reader_for_librarian_btn_enable)
+            return;
+
         auto* const view = ui->work_with_readers_for_librarian_table_view;
         const auto* model = view->model();
         if(model == nullptr)
@@ -823,10 +833,105 @@ void MainWindow::on_delete_reader_for_librarian_btn_clicked()
         dao.delete_reader(current_reader_id);
         current_reader_id = 0;
         view->setModel(nullptr);
+        is_get_book_from_reader_for_librarian_btn_enable = false;
     }
     catch (std::exception& ex)
     {
         QMessageBox::warning(this, "Error", ex.what());
         qDebug() << ex.what() << '\n';
     }
+}
+
+void MainWindow::on_show_taken_book_of_reader_for_librarian_btn_clicked()
+{
+    try
+    {
+        if(is_get_book_from_reader_for_librarian_btn_enable)
+            return;
+
+        auto* const view = ui->work_with_readers_for_librarian_table_view;
+        const auto* model = view->model();
+        if(model == nullptr)
+            return;
+
+        current_reader_id = model->index(view->currentIndex().row(), 0).data().toInt();
+
+        auto& new_model = dao.show_taken_books(current_reader_id);
+        ui->work_with_readers_for_librarian_table_view->setModel(&new_model);
+        is_get_book_from_reader_for_librarian_btn_enable = true;
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_get_book_from_reader_for_librarian_btn_clicked()
+{
+    try
+    {
+        if(!is_get_book_from_reader_for_librarian_btn_enable)
+            return;
+
+        auto* const view = ui->work_with_readers_for_librarian_table_view;
+        const auto* model = view->model();
+        if(model == nullptr)
+            return;
+
+        current_book_id = model->index(view->currentIndex().row(), 0).data().toInt();
+        dao.accept_book_from_reader(current_book_id, current_reader_id);
+        view->setModel(nullptr);
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_pushButton_25_clicked()
+{
+    // DON'T DELETE
+}
+
+void MainWindow::on_show_all_debtors_for_librarian_btn_clicked()
+{
+    try
+    {
+        auto& model = dao.show_all_debtors();
+        ui->work_with_debtors_for_librarian_table_view->setModel(&model);
+        is_reader_on_table_view = true;
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+}
+
+void MainWindow::on_show_readers_debts_btn_clicked()
+{
+    try
+    {
+        if(!is_reader_on_table_view)
+            return;
+
+        auto* const view = ui->work_with_debtors_for_librarian_table_view;
+        const auto* model = view->model();
+        if(model == nullptr)
+            return;
+
+        current_reader_id = model->index(view->currentIndex().row(), 0).data().toInt();
+        auto& new_model = dao.show_debtor_books(current_reader_id);
+        view->setModel(&new_model);
+        is_reader_on_table_view = false;
+    }
+    catch (std::exception& ex)
+    {
+        QMessageBox::warning(this, "Error", ex.what());
+        qDebug() << ex.what() << '\n';
+    }
+
+
 }

@@ -141,6 +141,16 @@ private slots:
 
     void on_delete_reader_for_librarian_btn_clicked();
 
+    void on_show_taken_book_of_reader_for_librarian_btn_clicked();
+
+    void on_get_book_from_reader_for_librarian_btn_clicked();
+
+    void on_pushButton_25_clicked();
+
+    void on_show_all_debtors_for_librarian_btn_clicked();
+
+    void on_show_readers_debts_btn_clicked();
+
 private:
     Ui::MainWindow *ui;
     DAO& dao;
@@ -155,5 +165,7 @@ private:
     int current_book_id;
     int current_reader_id;
     bool is_creation_now;
+    bool is_get_book_from_reader_for_librarian_btn_enable;
+    bool is_reader_on_table_view;
 };
 #endif // MAINWINDOW_H
