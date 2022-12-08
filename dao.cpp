@@ -140,8 +140,10 @@ void DAO::delete_book(int book_id)
 
 QSqlQueryModel &DAO::find_book_by_name(const QString &book_name)
 {
-    QString str_template = "SELECT * FROM books_info WHERE book_name=('%1')";
-    model->setQuery(str_template.arg(book_name));
+    QString str_template = "SELECT * FROM books_info WHERE book_name LIKE '%1%2'";
+    QString str = str_template.arg(book_name).arg("%");
+    qDebug() << "Str: " << str;
+    model->setQuery(str);
 
     if(model->lastError().isValid())
         throw std::runtime_error(model->lastError().text().toStdString());
