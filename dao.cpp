@@ -206,8 +206,17 @@ bool DAO::authorize_reader(const QString &name, const QString &surname, const QS
 
 void DAO::book_book(int b_id)
 {
-    QString str_template = "CALL book_book(%1);";
     QSqlQuery query;
+    make_query(query, QString("SELECT COUNT(*) FROM Cards WHERE reader_id = %1 AND status='BOOKED' AND period > NOW();").arg(id));
+    query.next();
+    int booked_books_count = query.value(0).toInt();
+    qDebug() << "booked_books_count: " << booked_books_count;
+    if(booked_books_count >= MAX_BOOKED_BOOKS_FOR_READER)
+        throw std::runtime_error("The maximum number of books you can book is " + std::to_string(MAX_BOOKED_BOOKS_FOR_READER));
+
+
+    QString str_template = "CALL book_book(%1);";
+
     make_query(query, str_template.arg(b_id));
 }
 

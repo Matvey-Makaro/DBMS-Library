@@ -161,10 +161,16 @@ void MainWindow::on_add_book_btn_2_clicked()
         book_info.author_surname = ui->author_surname_line_edit->text();
         book_info.author_patronymic = ui->author_patronymic_line_edit->text();
         book_info.author_pseudonym = ui->author_pseudonym_line_edit->text();
-        book_info.publication_year = ui->publication_year_line_edit->text().toInt();
+        bool is_publication_year_correct;
+        book_info.publication_year = ui->publication_year_line_edit->text().toUInt(&is_publication_year_correct);
+        if(!is_publication_year_correct)
+            throw std::runtime_error("Publication year is not uint.");
         book_info.publisher_name = ui->publisher_name_line_edit->text();
         book_info.isbn = ui->isbn_line_edit->text();
-        book_info.amount = ui->book_amount_line_edit->text().toInt();
+        bool is_amount_correct;
+        book_info.amount = ui->book_amount_line_edit->text().toUInt(&is_amount_correct);
+        if(!is_amount_correct)
+            throw std::runtime_error("Amount is not uint.");
 
         dao.add_book(book_info);
         stackedWidget->setCurrentIndex(WORK_WITH_BOOKS_FOR_LIBRARIAN);

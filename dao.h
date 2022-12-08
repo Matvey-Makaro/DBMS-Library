@@ -67,6 +67,7 @@ private:
     Role role;
     int id;
 
+    int MAX_BOOKED_BOOKS_FOR_READER = 5;
 
 };
 
