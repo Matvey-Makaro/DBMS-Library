@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>9</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="authorization_as_page">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -2600,7 +2600,7 @@
      <x>0</x>
      <y>0</y>
      <width>1104</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>

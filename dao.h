@@ -56,6 +56,7 @@ public:
 private:
     bool createConnection();
     void make_query(QSqlQuery& query, const QString& query_str);
+    void make_query(QSqlQuery& query);
 
 private:
     QSqlDatabase db;

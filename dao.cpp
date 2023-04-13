@@ -5,6 +5,7 @@
 #include <QStringList>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QCryptographicHash>
 #include <exception>
 #include <cassert>
 #include <utility>
@@ -63,21 +64,29 @@ bool DAO::authorize(Role role, const QString& login, const QString& password)
     else assert(0);
 
     QSqlQuery query;
-    QString query_str_template = "SELECT %1 FROM %2 WHERE login=\'%3\' AND password=\'%4\';";
-    make_query(query, query_str_template.arg(role_id_str).arg(table_str).arg(login).arg(password));
+    //QString query_str_template = "SELECT %1 FROM %2 WHERE login=\'%3\' AND password=\'%4\';";
+    QString query_str_template = "SELECT %1 FROM %2 WHERE login= :login AND password= :password;";
+    QByteArray hash = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256);
+    QString hashed_password = QString(hash.toHex());
+    query_str_template = query_str_template.arg(role_id_str).arg(table_str);
+    query.prepare(query_str_template);
+    query.bindValue(":login", login);
+    query.bindValue(":password", hashed_password);
 
+    make_query(query);
+
+    //' OR 1=1 AND '
     qDebug() << query.size() << '\n';
     if(query.size() == 0)
         return false;
-    assert(query.size() == 1);
+    if (query.size() != 1)
+        return false;
 
     query.next();
     id = query.value(role_id_str).toInt();
     qDebug() << id << '\n';
     make_query(query, QString("SET @CUR_ID=%1").arg(id));
     make_query(query, QString("SET @CUR_ROLE=\'%1\'").arg(role_str));
-
-
 
     return true;
 }
@@ -140,10 +149,14 @@ void DAO::delete_book(int book_id)
 
 QSqlQueryModel &DAO::find_book_by_name(const QString &book_name)
 {
-    QString str_template = "SELECT * FROM books_info WHERE book_name LIKE '%1%2'";
-    QString str = str_template.arg(book_name).arg("%");
-    qDebug() << "Str: " << str;
-    model->setQuery(str);
+    QString str_template = "SELECT * FROM books_info WHERE book_name LIKE :condition";
+//    QString str = str_template.arg(book_name).arg("%");
+//    qDebug() << "Str: " << str;
+    QSqlQuery query;
+    query.prepare(str_template);
+    query.bindValue(":condition", book_name + "%");
+    make_query(query);
+    model->setQuery(query);
 
     if(model->lastError().isValid())
         throw std::runtime_error(model->lastError().text().toStdString());
@@ -189,8 +202,13 @@ bool DAO::authorize_reader(const QString &name, const QString &surname, const QS
     QString role_str = "READER", role_id_str = "reader_id", table_str="readers_info";
 
     QSqlQuery query;
-    QString query_str_template = "SELECT %1 FROM %2 WHERE name=\'%3\' AND surname=\'%4\' AND number=\'%5\';";
-    make_query(query, query_str_template.arg(role_id_str).arg(table_str).arg(name).arg(surname).arg(number));
+    QString query_str_template = "SELECT %1 FROM %2 WHERE name= :name AND surname= :surname AND number= :number;";
+    query_str_template = query_str_template.arg(role_id_str).arg(table_str);
+    query.prepare(query_str_template);
+    query.bindValue(":name", name);
+    query.bindValue(":surname", surname);
+    query.bindValue(":number", number);
+    make_query(query);
 
     qDebug() << query.size() << '\n';
     if(query.size() == 0)
@@ -291,7 +309,9 @@ void DAO::create_librarian(const LibrarianInfo &librarian_info)
 
     if(librarian_info.password.isEmpty())
         throw std::runtime_error("Password can't be empty.");
-    str = str.arg(librarian_info.password);
+    QByteArray hash = QCryptographicHash::hash(librarian_info.password.toUtf8(), QCryptographicHash::Sha256);
+    QString hashed_password = QString(hash.toHex());
+    str = str.arg(hashed_password);
 
     if(librarian_info.name.isEmpty())
         throw std::runtime_error("Name can't be empty.");
@@ -324,8 +344,14 @@ void DAO::update_librarian(int librarian_id, const LibrarianInfo &librarian_info
 
     if(!librarian_info.login.isEmpty())
         make_query(query, QString("CALL set_login_to_librarian(%1, '%2');").arg(librarian_id).arg(librarian_info.login));
+
     if(!librarian_info.password.isEmpty())
-        make_query(query, QString("CALL set_password_to_librarian(%1, '%2');").arg(librarian_id).arg(librarian_info.password));
+    {
+        QByteArray hash = QCryptographicHash::hash(librarian_info.password.toUtf8(), QCryptographicHash::Sha256);
+        QString hashed_password = QString(hash.toHex());
+        make_query(query, QString("CALL set_password_to_librarian(%1, '%2');").arg(librarian_id).arg(hashed_password));
+    }
+
     if(!librarian_info.name.isEmpty())
         make_query(query, QString("CALL set_name_to_librarian(%1, '%2');").arg(librarian_id).arg(librarian_info.name));
     if(!librarian_info.surname.isEmpty())
@@ -478,11 +504,19 @@ bool DAO::createConnection()
     if(!db.open())
     {
         qDebug() << "Cannot open database:"  << db.lastError() << '\n';
+        return false;
     }
+    return true;
 }
 
 void DAO::make_query(QSqlQuery& query,  const QString& query_str)
 {
     if (!query.exec(query_str))
+        throw std::runtime_error("Query error!" + query.lastError().text().toStdString());
+}
+
+void DAO::make_query(QSqlQuery& query)
+{
+    if (!query.exec())
         throw std::runtime_error("Query error!" + query.lastError().text().toStdString());
 }

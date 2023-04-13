@@ -152,6 +152,9 @@ private slots:
     void on_show_readers_debts_btn_clicked();
 
 private:
+    void set_max_lengths();
+
+private:
     Ui::MainWindow *ui;
     DAO& dao;
 
@@ -167,5 +170,19 @@ private:
     bool is_creation_now;
     bool is_get_book_from_reader_for_librarian_btn_enable;
     bool is_reader_on_table_view;
+
+private:
+    static const int login_size = 45;
+    static const int password_size = 32;
+    static const int name_size = 45;
+    static const int phone_size = 13;
+    static const int email_size = 45;
+    static const int isbn_size = 45;
+    static const int literary_work_name = 200;
+    static const int int_size = 11;
+    static const int passport_series_size = 5;
+    static const int passport_number_size = 20;
+    static const int address_size = 100;
+    static const int year_size = 4;
 };
 #endif // MAINWINDOW_H

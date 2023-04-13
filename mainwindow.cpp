@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QMessageBox>
 
+
 enum Pages
 {
     AUTHORIZATION_AS = 0,
@@ -38,7 +39,54 @@ MainWindow::MainWindow(DAO& dao, QWidget *parent)
     ui->setupUi(this);
     stackedWidget = ui->stackedWidget;
     stackedWidget->setCurrentIndex(AUTHORIZATION_AS);
+    ui->password_line_edit->setEchoMode(QLineEdit::Password);
+    ui->password_for_librarian_line_edit->setEchoMode(QLineEdit::Password);
 
+    set_max_lengths();
+
+}
+
+void MainWindow::set_max_lengths()
+{
+    ui->login_line_edit->setMaxLength(login_size);
+    ui->password_line_edit->setMaxLength(password_size);
+
+    ui->name_for_authorization_reader_line_edit->setMaxLength(name_size);
+    ui->surname_for_authorization_for_reader_line_edit->setMaxLength(name_size);
+    ui->passport_number_for_authorization_reader_line_edit->setMaxLength(passport_number_size);
+
+    ui->book_name_line_edit->setMaxLength(literary_work_name);
+    ui->author_name_line_edit->setMaxLength(name_size);
+    ui->author_surname_line_edit->setMaxLength(name_size);
+    ui->author_patronymic_line_edit->setMaxLength(name_size);
+    ui->author_pseudonym_line_edit->setMaxLength(name_size);
+    ui->publication_year_line_edit->setMaxLength(year_size);
+    ui->publisher_name_line_edit->setMaxLength(name_size);
+    ui->isbn_line_edit->setMaxLength(isbn_size);
+    ui->book_amount_line_edit->setMaxLength(int_size);
+
+    ui->book_name_in_find_book_page_line_edit->setMaxLength(literary_work_name);
+
+    ui->enter_reader_id_line_edit->setMaxLength(int_size);
+
+    ui->login_for_librarian_line_edit->setMaxLength(login_size);
+    ui->password_for_librarian_line_edit->setMaxLength(password_size);
+    ui->name_for_librarian_line_edit->setMaxLength(name_size);
+    ui->surname_for_librarian_line_edit->setMaxLength(name_size);
+    ui->patronymic_for_librarian_line_edit->setMaxLength(name_size);
+    ui->phone_for_librarian_line_edit->setMaxLength(phone_size);
+    ui->email_for_librarian_line_edit->setMaxLength(email_size);
+
+    ui->room_name_line_edti->setMaxLength(name_size);
+
+    ui->name_for_add_reader_line_edit->setMaxLength(name_size);
+    ui->surname_for_add_reader_line_edit->setMaxLength(name_size);
+    ui->patronymic_for_add_reader_line_edit->setMaxLength(name_size);
+    ui->phone_for_add_reader_line_edit->setMaxLength(phone_size);
+    ui->email_for_add_reader_line_edit->setMaxLength(phone_size);
+    ui->address_for_add_reader_line_edit->setMaxLength(address_size);
+    ui->passport_series_for_add_reader_line_edit->setMaxLength(passport_series_size);
+    ui->passport_number_for_add_reader_line_edit->setMaxLength(passport_number_size);
 }
 
 MainWindow::~MainWindow()
